@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BattleTech Miniatures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .sections-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .form-section input, .form-section select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-section button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+
+        .filter-section input[type="checkbox"], .form-section input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .filter-section label, .form-section label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .filter-section button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filter-section button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        td, th {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Display logout link only if user is logged in -->
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" style="text-align: right; display: block; padding: 10px; color: #007BFF;">Logout</a>
+        {% endif %}
+
+        <!-- Sections Wrapper -->
+        <div class="sections-wrapper">
+            <!-- Add a Miniature Section -->
+            <div class="section form-section">
+                <h2>Add a Miniature</h2>
+                <form method="POST" action="/add_miniature">
+                    <label for="name">Miniature Name:</label>
+                    <input type="text" name="name" required>
+
+                    <label for="era">Era:</label>
+                    <input type="checkbox" name="era" value="Succession Wars"> Succession Wars
+                    <input type="checkbox" name="era" value="Clan Invasion"> Clan Invasion
+                    <input type="checkbox" name="era" value="Jihad"> Jihad
+                    <input type="checkbox" name="era" value="Dark Age"> Dark Age
+
+                    <label for="unit_type">Unit Type:</label>
+                    <input type="checkbox" name="unit_type" value="Mech"> Mech
+                    <input type="checkbox" name="unit_type" value="Vehicle"> Vehicle
+                    <input type="checkbox" name="unit_type" value="Aero"> Aero
+
+                    <label for="weight_class">Weight Class:</label>
+                    <input type="checkbox" name="weight_class" value="Light"> Light
+                    <input type="checkbox" name="weight_class" value="Medium"> Medium
+                    <input type="checkbox" name="weight_class" value="Heavy"> Heavy
+                    <input type="checkbox" name="weight_class" value="Assault"> Assault
+
+                    <label for="weapons">Weapons:</label>
+                    <input type="checkbox" name="weapons" value="AutoCannon"> AutoCannon
+                    <input type="checkbox" name="weapons" value="Laser"> Laser
+                    <input type="checkbox" name="weapons" value="PPC"> PPC
+                    <input type="checkbox" name="weapons" value="SRM"> SRM
+
+                    <label for="equipment">Equipment:</label>
+                    <input type="checkbox" name="equipment" value="ECM"> ECM
+                    <input type="checkbox" name="equipment" value="Active Probe"> Active Probe
+                    <input type="checkbox" name="equipment" value="TAG"> TAG
+                    <input type="checkbox" name="equipment" value="Drone"> Drone
+                    <input type="checkbox" name="equipment" value="NARC"> NARC
+                    <input type="checkbox" name="equipment" value="Stealth/Multi-Signature System"> Stealth/Multi-Signature System
+                    <input type="checkbox" name="equipment" value="Jump Jets"> Jump Jets
+                    <input type="checkbox" name="equipment" value="MASC/Supercharger"> MASC/Supercharger
+
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" min="1" required>
+
+                    <button type="submit">Add Miniature</button>
+                </form>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="section filter-section">
+                <h2>Filter Miniatures</h2>
+                <form method="GET" action="/">
+                    <label for="era">Era:</label>
+                    <input type="checkbox" name="era" value="Succession Wars"> Succession Wars
+                    <input type="checkbox" name="era" value="Clan Invasion"> Clan Invasion
+                    <input type="checkbox" name="era" value="Jihad"> Jihad
+                    <input type="checkbox" name="era" value="Dark Age"> Dark Age
+
+                    <label for="unit_type">Unit Type:</label>
+                    <input type="checkbox" name="unit_type" value="Mech"> Mech
+                    <input type="checkbox" name="unit_type" value="Vehicle"> Vehicle
+                    <input type="checkbox" name="unit_type" value="Aero"> Aero
+
+                    <label for="weight_class">Weight Class:</label>
+                    <input type="checkbox" name="weight_class" value="Light"> Light
+                    <input type="checkbox" name="weight_class" value="Medium"> Medium
+                    <input type="checkbox" name="weight_class" value="Heavy"> Heavy
+                    <input type="checkbox" name="weight_class" value="Assault"> Assault
+
+                    <label for="weapons">Weapons:</label>
+                    <input type="checkbox" name="weapons" value="AutoCannon"> AutoCannon
+                    <input type="checkbox" name="weapons" value="Laser"> Laser
+                    <input type="checkbox" name="weapons" value="PPC"> PPC
+                    <input type="checkbox" name="weapons" value="SRM"> SRM
+
+                    <label for="equipment">Equipment:</label>
+                    <input type="checkbox" name="equipment" value="ECM"> ECM
+                    <input type="checkbox" name="equipment" value="Active Probe"> Active Probe
+                    <input type="checkbox" name="equipment" value="TAG"> TAG
+                    <input type="checkbox" name="equipment" value="Drone"> Drone
+                    <input type="checkbox" name="equipment" value="NARC"> NARC
+                    <input type="checkbox" name="equipment" value="Stealth/Multi-Signature System"> Stealth/Multi-Signature System
+                    <input type="checkbox" name="equipment" value="Jump Jets"> Jump Jets
+                    <input type="checkbox" name="equipment" value="MASC/Supercharger"> MASC/Supercharger
+
+                    <button type="submit">Filter</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="section">
+            <h2>Miniatures List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Era</th>
+                        <th>Unit Type</th>
+                        <th>Weight Class</th>
+                        <th>Weapons</th>
+                        <th>Equipment</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mini in miniatures %}
+                    <tr>
+                        <td>{{ mini.name }}</td>
+                        <td>{{ ", ".join(mini.era) }}</td>
+                        <td>{{ mini.unit_type }}</td>
+                        <td>{{ mini.weight_class }}</td>
+                        <td>{{ ", ".join(mini.weapons) }}</td>
+                        <td>{{ ", ".join(mini.equipment) }}</td>
+                        <td>{{ mini.quantity }}</td>
+                        <td>
+                            <form method="POST" action="/delete_miniature" style="display:inline;">
+                                <input type="hidden" name="name" value="{{ mini.name }}">
+                                <input type="hidden" name="unit_type" value="{{ mini.unit_type }}">
+                                <input type="hidden" name="era" value="{{ ", ".join(mini.era) }}">
+                                <input type="hidden" name="weight_class" value="{{ mini.weight_class }}">
+                                <input type="hidden" name="weapons" value="{{ ", ".join(mini.weapons) }}">
+                                <input type="hidden" name="equipment" value="{{ ", ".join(mini.equipment) }}">
+                                <button type="submit">Delete One</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
